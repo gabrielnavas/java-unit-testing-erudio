@@ -1,21 +1,41 @@
 package io.github.gabrielnavas.automated_tests_with_java.math;
 
 import io.github.gabrielnavas.automated_tests_with_java.SimpleMath;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Test Math Operations in SimpleMath Class")
 public class SimpleMathTest {
 
+    SimpleMath math;
+
+    @BeforeAll
+    static void setup() {
+        System.out.println("@BeforeAll method. Create database, insert data etc.");
+    }
+
+    @AfterAll
+    static void clearUp() {
+        System.out.println("@AfterAll method. Clear database.");
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        math = new SimpleMath();
+        System.out.println("@BeforeEach method. Init objects for example.");
+    }
+
+    @AfterEach
+    void afterEach() {
+        System.out.println("@AfterEach method.");
+    }
+
     @Test
     @DisplayName("6.2 + 2 = 8.2")
     public void testSum() {
         // Given / Arrange
-        SimpleMath math = new SimpleMath();
+
         double first = 6.2D;
         double second = 2D;
         double expected = 8.2D;
@@ -36,7 +56,6 @@ public class SimpleMathTest {
     @DisplayName("6.2 + 2.0 = 4.2")
     public void testSubtract() {
         // Given
-        SimpleMath math = new SimpleMath();
         double first = 6.2;
         double second = 2.0;
         double expected = 4.2D;
@@ -58,7 +77,6 @@ public class SimpleMathTest {
     @DisplayName("6.0 * 2.0 = 12.0")
     public void testMultiply() {
         // Give
-        SimpleMath math = new SimpleMath();
         double first = 6;
         double second = 2;
         double expected = 12.0D;
@@ -79,7 +97,6 @@ public class SimpleMathTest {
     @DisplayName("6.0 / 2.0 = 3.0")
     public void testDivide() {
         // Give
-        SimpleMath math = new SimpleMath();
         double first = 6;
         double second = 2;
         double expected = 3.0D;
@@ -107,7 +124,6 @@ public class SimpleMathTest {
     @DisplayName("Root Square(81) = 9")
     public void testSqrt() {
         // Give
-        SimpleMath math = new SimpleMath();
         double n = 81;
         double expected = 9.0D;
 
@@ -127,7 +143,6 @@ public class SimpleMathTest {
     @DisplayName("(4.0 + 2.0) / 2 = 3")
     public void testMean_When_MeanFourAndTwo_ShouldReturnThree() {
         // Give
-        SimpleMath math = new SimpleMath();
         double first = 4;
         double second = 2;
         double expected = 3.0D;
