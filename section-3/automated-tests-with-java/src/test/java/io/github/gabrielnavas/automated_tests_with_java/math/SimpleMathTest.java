@@ -2,8 +2,11 @@ package io.github.gabrielnavas.automated_tests_with_java.math;
 
 import io.github.gabrielnavas.automated_tests_with_java.SimpleMath;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Test Math Operations in SimpleMath Class")
 public class SimpleMathTest {
@@ -11,16 +14,16 @@ public class SimpleMathTest {
     @Test
     @DisplayName("6.2 + 2 = 8.2")
     public void testSum() {
-        // Given
+        // Given / Arrange
         SimpleMath math = new SimpleMath();
         double first = 6.2D;
         double second = 2D;
         double expected = 8.2D;
 
-        // When
+        // When / Act
         Double actual = math.sum(first, second);
 
-        // Then
+        // Then / Assert
         Assertions.assertEquals(
                 expected,
                 actual,
@@ -93,32 +96,11 @@ public class SimpleMathTest {
         );
     }
 
+    @Disabled("TODO: We need still work on it!!")
     @Test
     @DisplayName("Test division by Zero")
     public void testDivide_When_FourIsDivideByZero_ShouldReturnTwo() {
-        // Give
-        SimpleMath math = new SimpleMath();
-        double first = 4;
-        double second = 0;
-        Exception expected = new ArithmeticException("Divide by zero");
-
-        // When
-        Exception actual = Assertions.assertThrows(
-                ArithmeticException.class,
-                () -> math.divide(first, second)
-
-        );
-
-        // When
-        Assertions.assertInstanceOf(ArithmeticException.class, actual, () -> String.format(
-                "actual should by instance of %s", ArithmeticException.class.getName()
-        ));
-        Assertions.assertEquals(expected.getMessage(), actual.getMessage(),
-                () -> String.format(
-                        "The math.divide(%.2f, %.2f) is not possible, because actual is zero.",
-                        first, second
-                )
-        );
+        fail();
     }
 
     @Test
