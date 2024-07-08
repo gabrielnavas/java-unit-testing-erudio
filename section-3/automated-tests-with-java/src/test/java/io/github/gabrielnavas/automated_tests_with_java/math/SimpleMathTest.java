@@ -7,10 +7,17 @@ import org.junit.jupiter.api.Test;
 public class SimpleMathTest {
 
     @Test
-    public void test() {
+    public void testSum() {
         SimpleMath math = new SimpleMath();
-        Double actual = math.sum(6.2D, 2D);
+        double first = 6.2D;
+        double second = 2D;
+        Double actual = math.sum(first, second);
         double expected = 8.2D;
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(
+                expected,
+                actual,
+                () -> String.format("The math.sum(%.2f, %.2f)=%.2f did not produced expected value %.2f.",
+                        first, second, actual, expected)
+        );
     }
 }
