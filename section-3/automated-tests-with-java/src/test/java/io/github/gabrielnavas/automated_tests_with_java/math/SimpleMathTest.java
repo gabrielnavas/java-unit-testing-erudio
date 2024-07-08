@@ -3,8 +3,6 @@ package io.github.gabrielnavas.automated_tests_with_java.math;
 import io.github.gabrielnavas.automated_tests_with_java.SimpleMath;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 @DisplayName("Test Math Operations in SimpleMath Class")
 public class SimpleMathTest {
 
@@ -113,11 +111,23 @@ public class SimpleMathTest {
         );
     }
 
-    @Disabled("TODO: We need still work on it!!")
     @Test
     @DisplayName("Test division by Zero")
-    public void testDivide_When_FourIsDivideByZero_ShouldReturnTwo() {
-        fail();
+    public void testDivide_divisionByZero() {
+        // Give
+        double firstNumber = 10;
+        double secondNumber = 0;
+        String expectedMessage = "Impossible to divide by zero";
+
+        // When & Then
+        ArithmeticException actual = Assertions.assertThrows(ArithmeticException.class, () ->
+                        // When
+                        math.divide(firstNumber, secondNumber),
+                () -> "Division by zero should throw ArithmeticException"
+        );
+
+        // Then
+        Assertions.assertEquals(expectedMessage, actual.getMessage(), () -> "Unexpected exception message");
     }
 
     @Test

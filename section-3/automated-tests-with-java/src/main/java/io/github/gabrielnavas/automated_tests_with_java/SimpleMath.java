@@ -15,8 +15,8 @@ public class SimpleMath {
     }
 
     public Double divide(Double first, Double second) {
-        if (second == 0) {
-            throw new ArithmeticException("Divide by zero");
+        if (second.equals(0D)) {
+            throw new ArithmeticException("Impossible to divide by zero");
         }
         return first / second;
     }
