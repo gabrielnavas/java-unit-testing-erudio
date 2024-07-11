@@ -14,7 +14,7 @@ public class SimpleMathTest {
     }
 
     @DisplayName("test division by Zero")
-    @RepeatedTest(value = 3)
+    @RepeatedTest(value = 3, name = "{displayName}. Repetition {currentRepetition} of {totalRepetitions}")
     public void testDivideByZero(
             RepetitionInfo repetitionInfo,
             TestInfo testInfo
