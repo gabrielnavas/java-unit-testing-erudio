@@ -1,4 +1,4 @@
-package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrdernedRandoly;
+package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrdenedRandoly;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
