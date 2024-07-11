@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 @DisplayName("Test Math Operations in SimpleMath Class")
 public class SimpleMathTest {
@@ -19,7 +19,11 @@ public class SimpleMathTest {
 
     @DisplayName("test subtraction [first, second, expected]")
     @ParameterizedTest
-    @CsvFileSource(resources = "/testDivision.csv")
+    @CsvSource({
+            "null, 2, 3.1",
+            "15.0, 2.0, 7.5",
+            "20, 10, 2",
+    })
     public void testDivide(double first, double second, double expected) {
         // When
         Double actual = math.divide(first, second);
