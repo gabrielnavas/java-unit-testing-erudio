@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class Person implements Serializable {
 
+    private static final Long serialVersionUID = 1L;
+
     private final Long id;
     private final String firstname;
     private final String lastname;
