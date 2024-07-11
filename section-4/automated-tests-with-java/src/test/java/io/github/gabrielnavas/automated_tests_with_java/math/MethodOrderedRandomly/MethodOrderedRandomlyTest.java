@@ -1,11 +1,11 @@
-package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrdenedRandoly;
+package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrderedRandomly;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.Random.class)
-public class MethodOrdernedRandolyTest {
+public class MethodOrderedRandomlyTest {
 
     @Test
     void testA() {

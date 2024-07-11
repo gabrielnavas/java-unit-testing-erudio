@@ -1,11 +1,11 @@
-package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrdernedByName;
+package io.github.gabrielnavas.automated_tests_with_java.math.MethodOrderedByName;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
-public class MethodOrdernedByName {
+public class MethodOrderedByName {
     @Test
     void testD() {
         System.out.println("Test D");
