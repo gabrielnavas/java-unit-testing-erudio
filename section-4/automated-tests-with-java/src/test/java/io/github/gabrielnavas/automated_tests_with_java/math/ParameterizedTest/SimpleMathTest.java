@@ -1,4 +1,4 @@
-package io.github.gabrielnavas.automated_tests_with_java.math;
+package io.github.gabrielnavas.automated_tests_with_java.math.ParameterizedTest;
 
 import io.github.gabrielnavas.automated_tests_with_java.SimpleMath;
 import org.junit.jupiter.api.Assertions;
@@ -17,9 +17,9 @@ public class SimpleMathTest {
 
     public static Stream<Arguments> testDivideInputParameters() {
         return Stream.of(
-                Arguments.of(6.2D, 2, 3.1D),
-                Arguments.of(10D, 5D, 2D),
-                Arguments.of(15, 2, 7.5D)
+                Arguments.of(10, 2, 5),
+                Arguments.of(15, 3, 5),
+                Arguments.of(50, 10, 5)
         );
     }
 
