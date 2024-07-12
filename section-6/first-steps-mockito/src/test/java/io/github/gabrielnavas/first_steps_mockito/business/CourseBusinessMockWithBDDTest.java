@@ -12,8 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class CourseBusinessMockWithBDDTest {
 
@@ -27,8 +26,9 @@ public class CourseBusinessMockWithBDDTest {
         mockService = Mockito.mock(CourseService.class);
         business = new CourseBusiness(mockService);
         courses = Arrays.asList(
-                "Spring Course 1",
-                "Course 2"
+                "Spring Course",
+                "Course",
+                "Course"
         );
     }
 
@@ -37,7 +37,7 @@ public class CourseBusinessMockWithBDDTest {
     public void testCoursesRelatedToSpring_When_UsingAMock() {
         // Given / Arrange
         given(mockService.retrieveCourses("John")).willReturn(courses);
-        String[] expected = new String[]{"Spring Course 1",};
+        String[] expected = new String[]{"Spring Course"};
 
         // When / Act
         var filteredCourses = business.retrieveCoursesRelatedToSpring("John");
@@ -51,13 +51,17 @@ public class CourseBusinessMockWithBDDTest {
     public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourse() {
         // Given
         given(mockService.retrieveCourses("John")).willReturn(courses);
-        String verifyCalled = courses.get(1);
 
         // When
         business.deleteCoursesNotRelatedToSpring("John");
 
         // Then
-        verify(mockService, never()).deleteCourse(courses.get(0)); // courses index 0 is never called
-        verify(mockService).deleteCourse(courses.get(1)); // course index 1 is called
+        verify(mockService,
+                never()
+        ).deleteCourse("Spring Course"); // courses "Srping Course" is never called
+        verify(
+                mockService,
+                times(2)
+        ).deleteCourse("Course"); // course with "Course" is called 2 times
     }
 }
