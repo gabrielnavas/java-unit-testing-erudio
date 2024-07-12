@@ -17,16 +17,25 @@ public class CourseBusiness {
 
     public List<String> retrieveCoursesRelatedToSpring(String student) {
         List<String> filteredCourses = new ArrayList<>();
-        if(student.equals("Foo Bar")) {
+        if (student.equals("Foo Bar")) {
             return filteredCourses;
         }
 
         var allCourses = courseService.retrieveCourses(student);
         for (var course : allCourses) {
-            if(course.contains("Spring")) {
+            if (course.contains("Spring")) {
                 filteredCourses.add(course);
             }
         }
         return filteredCourses;
+    }
+
+    public void deleteCoursesNotRelatedToSpring(String student) {
+        var allCourses = courseService.retrieveCourses(student);
+        for (var course : allCourses) {
+            if (!course.contains("Spring")) {
+                courseService.deleteCourse(course);
+            }
+        }
     }
 }

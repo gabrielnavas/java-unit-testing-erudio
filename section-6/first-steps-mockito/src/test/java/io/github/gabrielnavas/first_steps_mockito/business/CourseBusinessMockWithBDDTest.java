@@ -12,6 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 public class CourseBusinessMockWithBDDTest {
 
@@ -42,5 +43,19 @@ public class CourseBusinessMockWithBDDTest {
 
         // Then / Assert
         assertThat(expected, is(filteredCourses.toArray()));
+    }
+
+    @DisplayName("Delete Course not Related to Spring Using Mockito should call Method")
+    @Test
+    public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourse() {
+        // Given
+        given(mockService.retrieveCourses("John")).willReturn(courses);
+        String verifyCalled = courses.get(1);
+
+        // When
+        business.deleteCoursesNotRelatedToSpring("John");
+
+        // Then
+        verify(mockService).deleteCourse(verifyCalled);
     }
 }
