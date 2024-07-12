@@ -12,6 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class CourseBusinessMockWithBDDTest {
@@ -56,6 +57,7 @@ public class CourseBusinessMockWithBDDTest {
         business.deleteCoursesNotRelatedToSpring("John");
 
         // Then
-        verify(mockService).deleteCourse(verifyCalled);
+        verify(mockService, never()).deleteCourse(courses.get(0)); // courses index 0 is never called
+        verify(mockService).deleteCourse(courses.get(1)); // course index 1 is called
     }
 }

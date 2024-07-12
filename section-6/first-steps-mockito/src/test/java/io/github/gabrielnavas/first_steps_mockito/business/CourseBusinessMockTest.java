@@ -58,12 +58,12 @@ public class CourseBusinessMockTest {
     public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourse() {
         // Given
         when(mockService.retrieveCourses("John")).thenReturn(courses);
-        String verifyCalled = courses.get(1);
 
         // When
         business.deleteCoursesNotRelatedToSpring("John");
 
         // Then
-        verify(mockService).deleteCourse(verifyCalled);
+        verify(mockService, never()).deleteCourse(courses.get(0)); // courses index 0 is never called
+        verify(mockService).deleteCourse(courses.get(1)); // course index 1 is called
     }
 }
