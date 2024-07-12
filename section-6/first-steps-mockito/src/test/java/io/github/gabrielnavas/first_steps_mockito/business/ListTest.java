@@ -38,4 +38,17 @@ public class ListTest {
         Assertions.assertEquals(20, list.size());
         Assertions.assertEquals(30, list.size());
     }
+
+    @DisplayName("Test Mocking When Size Is Called Should Return String Navas")
+    @Test
+    public void testMocking_When_SizeIsCalled_ShouldReturnStringNavas() {
+        // Given / Arrange
+        List list = Mockito.mock(List.class);
+        Mockito.when(list.get(0))
+                .thenReturn("Navas");
+
+        // When & Then / Assert
+        Assertions.assertEquals("Navas", list.get(0));
+        Assertions.assertNull(list.get(1));
+    }
 }
