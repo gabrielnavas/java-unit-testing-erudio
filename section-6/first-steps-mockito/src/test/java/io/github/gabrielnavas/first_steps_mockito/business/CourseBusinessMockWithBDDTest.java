@@ -65,7 +65,6 @@ public class CourseBusinessMockWithBDDTest {
         ).deleteCourse("Course"); // course with "Course" is called 2 times
     }
 
-
     @DisplayName("Delete Course not Related to Spring Using Mockito should call Method At least")
     @Test
     public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourseAtLeast() {

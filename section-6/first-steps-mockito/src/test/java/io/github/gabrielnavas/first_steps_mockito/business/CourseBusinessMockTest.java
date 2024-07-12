@@ -1,14 +1,17 @@
 package io.github.gabrielnavas.first_steps_mockito.business;
 
 import io.github.gabrielnavas.first_steps_mockito.service.CourseService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +51,7 @@ public class CourseBusinessMockTest {
         var filteredCourses = business.retrieveCoursesRelatedToSpring("John");
 
         // Then / Assert
-        Assertions.assertArrayEquals(
+        assertArrayEquals(
                 filteredCourses.toArray(),
                 expected
         );
@@ -80,5 +83,26 @@ public class CourseBusinessMockTest {
         // Then
         then(mockService).should(never()).deleteCourse(courses.get(0)); // courses index 0 is never called
         then(mockService).should().deleteCourse(courses.get(1)); // course index 1 is called
+    }
+
+
+    @DisplayName("Delete Courses Not Related To Spring Capturing Arguments Should Call Method Delete Course")
+    @Test
+    public void testDeleteCoursesNotRelatedToSpring_CapturingArguments_Should_CallMethod_DeleteCourse() {
+        // Given
+        courses = new ArrayList<>() {{
+            add("Course 1");
+            add("Course 1");
+            add("Spring Course 2");
+        }};
+        when(mockService.retrieveCourses("John")).thenReturn(courses);
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // When
+        business.deleteCoursesNotRelatedToSpring("John");
+
+        // Then
+        verify(mockService, times(2)).deleteCourse(argumentCaptor.capture()); // call method 2 times with argument
+        assertEquals(courses.get(0), argumentCaptor.getValue()); // verify if argument is courses.get(0)
     }
 }
