@@ -65,4 +65,21 @@ public class ListTest {
         Assertions.assertEquals("Navas", list.get(Mockito.anyInt()));
         Assertions.assertNotNull(list.get(Mockito.anyInt()));
     }
+
+    @DisplayName("Test Mocking When Throws An Exception")
+    @Test
+    public void testMocking_When_ThrowsAnException() {
+        // Given
+        List list = Mockito.mock(List.class);
+        Mockito.when(list.get(Mockito.anyInt()))
+                .thenThrow(new RuntimeException("Something went wrong"));
+
+        // Then
+        Assertions.assertThrows(
+                RuntimeException.class,
+                // When
+                () -> list.get(Mockito.anyInt()),
+                () -> "runtime exception expected"
+        );
+    }
 }
