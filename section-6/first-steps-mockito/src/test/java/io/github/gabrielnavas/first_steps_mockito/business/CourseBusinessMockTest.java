@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 public class CourseBusinessMockTest {
@@ -53,7 +54,7 @@ public class CourseBusinessMockTest {
         );
     }
 
-    @DisplayName("Delete Course not Related to Spring Using Mockito should call Method")
+    @DisplayName("Delete Course not Related to Spring Using Mockito should call Method V2 (prefer this)")
     @Test
     public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourse() {
         // Given
@@ -65,5 +66,19 @@ public class CourseBusinessMockTest {
         // Then
         verify(mockService, never()).deleteCourse(courses.get(0)); // courses index 0 is never called
         verify(mockService).deleteCourse(courses.get(1)); // course index 1 is called
+    }
+
+    @DisplayName("Delete Course not Related to Spring Using Mockito should call Method With V2")
+    @Test
+    public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourseV2() {
+        // Given
+        when(mockService.retrieveCourses("John")).thenReturn(courses);
+
+        // When
+        business.deleteCoursesNotRelatedToSpring("John");
+
+        // Then
+        then(mockService).should(never()).deleteCourse(courses.get(0)); // courses index 0 is never called
+        then(mockService).should().deleteCourse(courses.get(1)); // course index 1 is called
     }
 }
