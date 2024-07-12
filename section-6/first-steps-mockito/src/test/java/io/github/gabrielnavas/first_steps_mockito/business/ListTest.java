@@ -22,4 +22,20 @@ public class ListTest {
         // Then / Assert
         Assertions.assertEquals(10, size);
     }
+
+    @DisplayName("Test Mocking When Size Is Called Should Return Multiple Values")
+    @Test
+    public void testMocking_When_SizeIsCalled_ShouldReturnMultipleValues() {
+        // Given / Arrange
+        List<?> list = Mockito.mock(List.class);
+        Mockito.when(list.size())
+                .thenReturn(10)
+                .thenReturn(20)
+                .thenReturn(30);
+
+        // When & Then / Assert
+        Assertions.assertEquals(10, list.size());
+        Assertions.assertEquals(20, list.size());
+        Assertions.assertEquals(30, list.size());
+    }
 }
