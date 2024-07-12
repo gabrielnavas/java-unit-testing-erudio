@@ -51,4 +51,18 @@ public class ListTest {
         Assertions.assertEquals("Navas", list.get(0));
         Assertions.assertNull(list.get(1));
     }
+
+    @DisplayName("Test Mocking When Get Is Called With Argument Matcher Should Return String Navas Any Index")
+    @Test
+    public void testMocking_When_GetIsCalledWithArgumentMatcher_ShouldReturnStringNavas() {
+        // Given / Arrange
+        List list = Mockito.mock(List.class);
+        Mockito.when(list.get(Mockito.anyInt()))
+                .thenReturn("Navas");
+
+        // When & Then / Assert
+        Assertions.assertEquals("Navas", list.get(Mockito.anyInt()));
+        Assertions.assertEquals("Navas", list.get(Mockito.anyInt()));
+        Assertions.assertNotNull(list.get(Mockito.anyInt()));
+    }
 }
