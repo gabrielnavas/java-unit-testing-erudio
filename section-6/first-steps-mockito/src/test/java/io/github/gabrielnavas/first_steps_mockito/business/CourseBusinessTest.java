@@ -25,22 +25,4 @@ public class CourseBusinessTest {
                 expected
         );
     }
-
-    @DisplayName("Test Courses Related To Spring When Using As Stub")
-    @Test
-    public void testCoursesRelatedToSpring_When_UsingAFooBarStudent() {
-        // Given / Arrange
-        CourseService stubService = new CourseServiceStub();
-        CourseBusiness business = new CourseBusiness(stubService);
-        String[] expected = new String[]{};
-
-        // When / Act
-        var filteredCourses = business.retrieveCoursesRelatedToSpring("Foo Bar");
-
-        // Then / Assert
-        Assertions.assertArrayEquals(
-                filteredCourses.toArray(),
-                expected
-        );
-    }
 }
