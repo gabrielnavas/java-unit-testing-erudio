@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 public class CourseBusinessMockTest {
 
@@ -19,7 +20,7 @@ public class CourseBusinessMockTest {
     @BeforeEach
     void setUp() {
         // Given / Arrange
-        mockService = Mockito.mock(CourseService.class);
+        mockService = mock(CourseService.class);
         business = new CourseBusiness(mockService);
         courses = Arrays.asList(
                 "Spring Course 1",
@@ -35,7 +36,7 @@ public class CourseBusinessMockTest {
     @Test
     public void testCoursesRelatedToSpring_When_UsingAMock() {
         // Given / Arrange
-        Mockito.when(mockService.retrieveCourses("John")).thenReturn(courses);
+        when(mockService.retrieveCourses("John")).thenReturn(courses);
         String[] expected = new String[]{
                 "Spring Course 1",
                 "Spring Course 3",
@@ -50,5 +51,19 @@ public class CourseBusinessMockTest {
                 filteredCourses.toArray(),
                 expected
         );
+    }
+
+    @DisplayName("Delete Course not Related to Spring Using Mockito should call Method")
+    @Test
+    public void testDeleteCoursesNotRelatedToSpring_UsingMockitoVerify_ShouldCallMethodDeleteCourse() {
+        // Given
+        when(mockService.retrieveCourses("John")).thenReturn(courses);
+        String verifyCalled = courses.get(1);
+
+        // When
+        business.deleteCoursesNotRelatedToSpring("John");
+
+        // Then
+        verify(mockService).deleteCourse(verifyCalled);
     }
 }
