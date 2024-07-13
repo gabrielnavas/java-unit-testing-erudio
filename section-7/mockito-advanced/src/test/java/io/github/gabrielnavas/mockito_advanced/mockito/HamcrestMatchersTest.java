@@ -42,5 +42,7 @@ public class HamcrestMatchersTest {
 
         // When & Then
         assertThat(myArray, arrayWithSize(3));
+        assertThat(myArray, arrayContaining(1, 2, 3));
+        assertThat(myArray, arrayContainingInAnyOrder(2, 1, 3));
     }
 }
