@@ -68,7 +68,7 @@ public class CourseBusinessMockTest {
 
         // Then
         verify(mockService, never()).deleteCourse(courses.get(0)); // courses index 0 is never called
-        verify(mockService).deleteCourse(courses.get(1)); // course index 1 is called
+        verify(mockService, times(1)).deleteCourse(courses.get(1)); // course index 1 is called
     }
 
     @DisplayName("Delete Course not Related to Spring Using Mockito should call Method With V2")
