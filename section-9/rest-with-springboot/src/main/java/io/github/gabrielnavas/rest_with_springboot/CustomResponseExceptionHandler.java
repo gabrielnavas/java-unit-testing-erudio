@@ -20,4 +20,14 @@ public class CustomResponseExceptionHandler extends ResponseEntityExceptionHandl
         );
         return ResponseEntity.internalServerError().body(exceptionResponse);
     }
+
+    @ExceptionHandler(UnsupportedMathOperationException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return ResponseEntity.badRequest().body(exceptionResponse);
+    }
 }
