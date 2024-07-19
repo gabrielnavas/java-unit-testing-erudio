@@ -21,14 +21,18 @@ public class MathController {
             @PathVariable("numberOne") String numberOne,
             @PathVariable("numberTwo") String numberTwo
     ) {
+        return toDouble(numberOne) + toDouble(numberTwo);
+    }
 
-        if (!isNumeric(numberOne)) {
-            throw new IllegalArgumentException("param one is not a number");
+    private Double toDouble(String number) {
+        if (number == null || number.isEmpty()) {
+            return 0.0;
         }
-        if (!isNumeric(numberTwo)) {
-            throw new IllegalArgumentException("param two is not a number");
+        final String americanFormat = number.replaceAll(",", ".");
+        if (!isNumeric(americanFormat)) {
+            throw new IllegalArgumentException("param is not a number");
         }
-        return Double.parseDouble(numberOne) + Double.parseDouble(numberTwo);
+        return Double.parseDouble(americanFormat);
     }
 
     private boolean isNumeric(String number) {
