@@ -1,4 +1,4 @@
-package io.github.gabrielnavas.rest_with_springboot;
+package io.github.gabrielnavas.rest_with_springboot.math;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package io.github.gabrielnavas.rest_with_springboot;
+package io.github.gabrielnavas.rest_with_springboot.math;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
