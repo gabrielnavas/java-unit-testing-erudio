@@ -49,6 +49,24 @@ public class MathController {
         return toDouble(numberOne) / numberTwoDouble;
     }
 
+    @GetMapping("/average/{numbers}")
+    public Double average(
+            @PathVariable(value = "numbers") String numbers
+    ) {
+        if (numbers.isEmpty()) {
+            return 0.0;
+        }
+        String[] numbersArray = numbers.split(",");
+        if (numbersArray.length == 0) {
+            return 0.0;
+        }
+        double sum = 0.0;
+        for (String number : numbersArray) {
+            sum += toDouble(number);
+        }
+        return sum / numbersArray.length;
+    }
+
     private boolean isZero(Double number) {
         double epsilon = 1e-10;
         return Math.abs(number) < epsilon;
