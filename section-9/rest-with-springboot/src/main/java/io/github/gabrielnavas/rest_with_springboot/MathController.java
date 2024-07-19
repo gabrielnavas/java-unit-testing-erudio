@@ -54,7 +54,7 @@ public class MathController {
             @PathVariable(value = "numbers") String numbers
     ) {
         if (numbers.isEmpty()) {
-            return 0.0;
+            throw new UnsupportedMathOperationException("missing param numbers");
         }
         String[] numbersArray = numbers.split(",");
         if (numbersArray.length == 0) {
@@ -65,6 +65,26 @@ public class MathController {
             sum += toDouble(number);
         }
         return sum / numbersArray.length;
+    }
+
+
+    @GetMapping("/sqrt/{number}")
+    public Double sqrt(
+            @PathVariable(value = "number") String number
+    ) {
+        if (number.isEmpty()) {
+            throw new UnsupportedMathOperationException("missing param number");
+        }
+        final Double numberDouble = toDouble(number);
+        if (isNegative(numberDouble)) {
+            throw new UnsupportedMathOperationException("unsupported number negative");
+        }
+        return Math.sqrt(toDouble(number));
+    }
+
+    private boolean isNegative(Double number) {
+        double epsilon = 1e-10;
+        return number < epsilon;
     }
 
     private boolean isZero(Double number) {
