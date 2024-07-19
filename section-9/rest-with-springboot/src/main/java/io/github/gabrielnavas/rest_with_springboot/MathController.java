@@ -20,6 +20,14 @@ public class MathController {
         return toDouble(numberOne) + toDouble(numberTwo);
     }
 
+    @GetMapping("/subtract/{numberOne}/{numberTwo}")
+    public Double subtract(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) {
+        return toDouble(numberOne) - toDouble(numberTwo);
+    }
+
     private Double toDouble(String number) {
         if (number == null || number.isEmpty()) {
             return 0.0;
