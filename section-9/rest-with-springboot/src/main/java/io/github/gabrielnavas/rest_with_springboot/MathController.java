@@ -28,6 +28,15 @@ public class MathController {
         return toDouble(numberOne) - toDouble(numberTwo);
     }
 
+
+    @GetMapping("/multiply/{numberOne}/{numberTwo}")
+    public Double multiply(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) {
+        return toDouble(numberOne) * toDouble(numberTwo);
+    }
+
     private Double toDouble(String number) {
         if (number == null || number.isEmpty()) {
             return 0.0;
