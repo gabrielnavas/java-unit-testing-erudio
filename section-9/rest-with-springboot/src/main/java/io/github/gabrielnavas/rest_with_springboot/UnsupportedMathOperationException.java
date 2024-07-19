@@ -9,4 +9,12 @@ import java.io.Serial;
 public class UnsupportedMathOperationException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public UnsupportedMathOperationException() {
+        super();
+    }
+
+    public UnsupportedMathOperationException(String message) {
+        super(message);
+    }
 }

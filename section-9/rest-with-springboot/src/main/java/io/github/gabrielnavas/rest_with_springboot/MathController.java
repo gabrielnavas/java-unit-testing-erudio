@@ -28,13 +28,30 @@ public class MathController {
         return toDouble(numberOne) - toDouble(numberTwo);
     }
 
-
     @GetMapping("/multiply/{numberOne}/{numberTwo}")
     public Double multiply(
             @PathVariable("numberOne") String numberOne,
             @PathVariable("numberTwo") String numberTwo
     ) {
         return toDouble(numberOne) * toDouble(numberTwo);
+    }
+
+    @GetMapping("/division/{numberOne}/{numberTwo}")
+    public Double division(
+            @PathVariable("numberOne") String numberOne,
+            @PathVariable("numberTwo") String numberTwo
+    ) {
+        Double numberTwoDouble = toDouble(numberTwo);
+        if (isZero(numberTwoDouble)) {
+            throw new UnsupportedMathOperationException("Division by zero is not supported");
+        }
+
+        return toDouble(numberOne) / numberTwoDouble;
+    }
+
+    private boolean isZero(Double number) {
+        double epsilon = 1e-10;
+        return Math.abs(number) < epsilon;
     }
 
     private Double toDouble(String number) {
