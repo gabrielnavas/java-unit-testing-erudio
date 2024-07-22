@@ -7,6 +7,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/*
+ * // GET ONE
+ * curl -X GET http://localhost:8080/person/1001
+ *
+ * // GET ALL
+ * curl -X GET http://localhost:8080/person
+ *
+ * // POST
+ * curl -X POST http://localhost:8080/person -H "Content-Type: application/json" -d '{"firstname": "John", "lastName": "Carry", "address": " 1 Street", "gender":"Male"}'
+ *
+ * // PATCH
+ * curl -X PATCH http://localhost:8080/person/1001 -H "Content-Type: application/json" -d '{"firstName":"Mary", "lastName": "Laster", "address": "Here", "gender":"Woman"}'
+ *
+ * // DELETE
+ * curl -X DELETE http://localhost:8080/person/1001
+ * */
+
+
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -45,5 +63,15 @@ public class PersonController {
             @RequestBody PersonRequest request
     ) {
         personService.partialsUpdatePerson(personId, request);
+    }
+
+    @DeleteMapping(
+            value = "/{person-id}"
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePerson(
+            @PathVariable("person-id") Long personId
+    ) {
+        personService.deletePerson(personId);
     }
 }

@@ -67,9 +67,9 @@ public class PersonService {
 
     public void partialsUpdatePerson(Long personId, PersonRequest request) {
         Person person = null;
-        for (int i = 0; i < people.size(); i++) {
-            if (people.get(i).getId().equals(personId)) {
-                person = people.get(i);
+        for (Person value : people) {
+            if (value.getId().equals(personId)) {
+                person = value;
             }
         }
 
@@ -81,5 +81,20 @@ public class PersonService {
         person.setLastName(request.getLastName());
         person.setGender(request.getGender());
         person.setAddress(request.getAddress());
+    }
+
+    public void deletePerson(Long personId) {
+        Person person = null;
+        for (Person value : people) {
+            if (value.getId().equals(personId)) {
+                person = value;
+            }
+        }
+
+        if (person == null) {
+            throw new RuntimeException("person not found");
+        }
+
+        people.remove(person);
     }
 }
