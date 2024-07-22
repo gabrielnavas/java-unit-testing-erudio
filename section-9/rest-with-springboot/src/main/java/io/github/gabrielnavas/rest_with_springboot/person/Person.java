@@ -20,6 +20,10 @@ public class Person {
         this(0L, "", "", "", "");
     }
 
+    public Person(String firstName, String lastName, String address, String gender) {
+        this(0L, firstName, lastName, address, gender);
+    }
+
     public Person(Long id, String firstName, String lastName, String address, String gender) {
         this.id = id;
         this.firstName = firstName;
