@@ -43,7 +43,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             AND p.lastName = :lastName
             """
     )
-    Optional<Person> findByFirstNameAndLastName(String firstName, String lastName);
+    Optional<Person> findByFirstNameAndLastNameBasic(String firstName, String lastName);
 
     @Query("""
             SELECT p 

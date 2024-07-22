@@ -118,9 +118,9 @@ public class PersonRepositoryTest {
         assertEquals("Male", person.getGender());
     }
 
-    @DisplayName("Given Person Object When Find By Firstname and LastName then return Person Object")
+    @DisplayName("Given Person Object When Find By Firstname and LastName then return Person Object With Basic Parameters")
     @Test
-    void testGivenPersonObject_WhenFindByFirstNameAndLastEmail_ThenReturnPersonObject() {
+    void testGivenPersonObject_WhenFindByFirstNameAndLastEmail_ThenReturnPersonObject_WithBasicParameters() {
         // Given
         String firstName = "John";
         String lastName = "Carry";
@@ -129,7 +129,7 @@ public class PersonRepositoryTest {
         personRepository.save(person);
 
         // When
-        Optional<Person> optionalPerson = personRepository.findByFirstNameAndLastName(firstName, lastName);
+        Optional<Person> optionalPerson = personRepository.findByFirstNameAndLastNameBasic(firstName, lastName);
 
         // Then
         assertTrue(optionalPerson.isPresent());
