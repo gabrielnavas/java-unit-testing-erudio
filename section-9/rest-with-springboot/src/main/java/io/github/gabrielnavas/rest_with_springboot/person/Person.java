@@ -1,14 +1,20 @@
 package io.github.gabrielnavas.rest_with_springboot.person;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "person")
 public class Person {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
     private String address;
     private String gender;
-
 
     public Person() {
         this(0L, "", "", "", "");

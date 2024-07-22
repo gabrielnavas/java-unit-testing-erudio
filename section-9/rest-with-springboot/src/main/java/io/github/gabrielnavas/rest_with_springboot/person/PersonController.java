@@ -9,16 +9,22 @@ import java.util.List;
 
 /*
  * // GET ONE
- * curl -X GET http://localhost:8080/person/1001
+ * curl -X GET http://localhost:8080/person/1
  *
- * // GET ALL
+ * // GET ALL WITH QUERY
+ * curl -X GET http://localhost:8080/person?page=0\&size=1\&query="Carry"
+ *
+ *  * // GET ALL WITHOUT QUERY
+ * curl -X GET http://localhost:8080/person?page=0\&size=10
+ *
+ * // GET ALL WITHOUT QUERY, PAGES AND SIZE
  * curl -X GET http://localhost:8080/person
  *
  * // POST
- * curl -X POST http://localhost:8080/person -H "Content-Type: application/json" -d '{"firstname": "John", "lastName": "Carry", "address": " 1 Street", "gender":"Male"}'
+ * curl -X POST http://localhost:8080/person -H "Content-Type: application/json" -d '{"firstName": "John", "lastName": "Carry", "address": " 1 Street", "gender":"Male"}'
  *
  * // PATCH
- * curl -X PATCH http://localhost:8080/person/1001 -H "Content-Type: application/json" -d '{"firstName":"Mary", "lastName": "Laster", "address": "Here", "gender":"Woman"}'
+ * curl -X PATCH http://localhost:8080/person/1 -H "Content-Type: application/json" -d '{"firstName":"Mary", "lastName": "Laster", "address": "Here", "gender":"Woman"}'
  *
  * // DELETE
  * curl -X DELETE http://localhost:8080/person/1001
@@ -41,11 +47,12 @@ public class PersonController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Person> findPersonById(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+    public List<Person> findAllPerson(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "query", defaultValue = "") String searchQuery
     ) {
-        return personService.findAllPerson(page, size);
+        return personService.findAllPerson(page, size, searchQuery);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

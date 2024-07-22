@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: rest-with-spring-boot
+    image: postgres
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rest-with-spring-boot
+    ports:
+      - "5433:5432"
+    networks:
+      - spring-demo
+    restart: unless-stopped
+
+networks:
+  spring-demo:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
