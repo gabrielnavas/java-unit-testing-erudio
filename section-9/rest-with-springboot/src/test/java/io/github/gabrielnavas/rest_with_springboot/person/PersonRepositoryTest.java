@@ -118,7 +118,6 @@ public class PersonRepositoryTest {
         assertEquals("Male", person.getGender());
     }
 
-
     @DisplayName("Given Person Object When Update Person Then Return Updated Person Object")
     @Test
     void testGivenPersonObject_WhenUpdatePerson_thenReturnUpdatedPersonObject() {
@@ -150,5 +149,21 @@ public class PersonRepositoryTest {
         assertEquals(person.getLastName(), personUpdated.getLastName());
         assertEquals(person.getAddress(), personUpdated.getAddress());
         assertEquals(person.getGender(), personUpdated.getGender());
+    }
+
+    @DisplayName("Given Person Object When Delete Person Then Remove Person Object")
+    @Test
+    void testGivenPersonObject_WhenDeletePerson_thenRemovePersonObject() {
+        // Given
+        Person person = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
+        person = personRepository.save(person);
+
+        // When
+        personRepository.delete(person);
+
+        // Then
+        Optional<Person> optionalPerson = personRepository.findById(person.getId());
+
+        assertTrue(optionalPerson.isEmpty());
     }
 }
