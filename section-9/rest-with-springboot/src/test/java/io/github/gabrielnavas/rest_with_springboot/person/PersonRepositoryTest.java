@@ -118,6 +118,36 @@ public class PersonRepositoryTest {
         assertEquals("Male", person.getGender());
     }
 
+
+    @DisplayName("Given Person Object When Find By Firstname and LastName then return Person Object")
+    @Test
+    void testGivenPersonObject_WhenFindByFirstNameAndLastEmail_ThenReturnPersonObject() {
+        // Given
+        String firstName = "John";
+        String lastName = "Carry";
+        Person person = new Person(firstName, lastName, "john@email.com", "1 Street", "Male");
+        Long expectedPersonId = 1L;
+        personRepository.save(person);
+
+        // When
+        Optional<Person> optionalPerson = personRepository.findByFirstNameAndLastName(firstName, lastName);
+
+        // Then
+        assertTrue(optionalPerson.isPresent());
+        Person receivedPerson = optionalPerson.get();
+
+        assertNotNull(receivedPerson);
+        assertNotNull(receivedPerson.getFirstName());
+        assertNotNull(receivedPerson.getLastName());
+        assertNotNull(receivedPerson.getAddress());
+        assertNotNull(receivedPerson.getGender());
+        assertTrue(receivedPerson.getId() >= expectedPersonId);
+        assertEquals(firstName, receivedPerson.getFirstName());
+        assertEquals(lastName, receivedPerson.getLastName());
+        assertEquals("1 Street", person.getAddress());
+        assertEquals("Male", person.getGender());
+    }
+
     @DisplayName("Given Person Object When Update Person Then Return Updated Person Object")
     @Test
     void testGivenPersonObject_WhenUpdatePerson_thenReturnUpdatedPersonObject() {

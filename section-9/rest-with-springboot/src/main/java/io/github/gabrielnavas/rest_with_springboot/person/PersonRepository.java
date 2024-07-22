@@ -26,4 +26,14 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
 
     Optional<Person> findByEmail(String email);
+
+    @Query("""
+            SELECT p 
+            FROM Person p
+            WHERE p.firstName = :firstName
+            AND p.lastName = :lastName
+            """
+    )
+    Optional<Person> findByFirstNameAndLastName(String firstName, String lastName);
+
 }
