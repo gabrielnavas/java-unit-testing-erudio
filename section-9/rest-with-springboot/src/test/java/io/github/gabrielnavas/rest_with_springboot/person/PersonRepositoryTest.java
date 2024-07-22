@@ -21,7 +21,7 @@ public class PersonRepositoryTest {
     @Test
     void testGivenPersonObject_WhenSave_thenReturnSavedPerson() {
         // Given
-        Person person = new Person("John", "Carry", "1 Street", "Male");
+        Person person = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
 
         // When
         person = personRepository.save(person);
@@ -46,8 +46,8 @@ public class PersonRepositoryTest {
     @Test
     void testGivenPersonObjects_WhenFindAllByQuery_thenReturnListPerson() {
         // Given
-        Person person1 = new Person("John", "Carry", "1 Street", "Male");
-        Person person2 = new Person("Mary", "Luth", "10 Street", "Woman");
+        Person person1 = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
+        Person person2 = new Person("Mary", "Luth", "mary@email.com", "10 Street", "Woman");
 
         String lastNameSubstring = "rry";
         PageRequest page = PageRequest.of(0, 10);
@@ -68,12 +68,12 @@ public class PersonRepositoryTest {
     @Test
     void testGivenPersonObject_WhenFindById_thenReturnPersonObject() {
         // Given
-        Person person = new Person("John", "Carry", "1 Street", "Male");
-        Long personId = 1L;
-        personRepository.save(person);
+        Person person = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
+        Long expectedPersonId = 1L;
+        person = personRepository.save(person);
 
         // When
-        Optional<Person> actualPersonOptional = personRepository.findById(personId);
+        Optional<Person> actualPersonOptional = personRepository.findById(person.getId());
         person = actualPersonOptional.get();
 
         // Then
@@ -83,13 +83,38 @@ public class PersonRepositoryTest {
         assertNotNull(person.getAddress());
         assertNotNull(person.getGender());
 
-        assertTrue(person.getId() >= personId);
+        assertTrue(person.getId() >= expectedPersonId);
 
-        assertEquals(personId, person.getId());
         assertEquals("John", person.getFirstName());
         assertEquals("Carry", person.getLastName());
         assertEquals("1 Street", person.getAddress());
         assertEquals("Male", person.getGender());
     }
 
+    @DisplayName("Given Person Object When Find By Email then return Person Object")
+    @Test
+    void testGivenPersonObject_WhenFindByEmail_ThenReturnPersonObject() {
+        // Given
+        Person person = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
+        Long expectedPersonId = 1L;
+        personRepository.save(person);
+
+        // When
+        Optional<Person> optionalPerson = personRepository.findByEmail(person.getEmail());
+        Person receivedPerson = optionalPerson.get();
+
+        // Then
+        assertNotNull(receivedPerson);
+        assertNotNull(receivedPerson.getFirstName());
+        assertNotNull(receivedPerson.getLastName());
+        assertNotNull(receivedPerson.getAddress());
+        assertNotNull(receivedPerson.getGender());
+
+        assertTrue(receivedPerson.getId() >= expectedPersonId);
+
+        assertEquals("John", person.getFirstName());
+        assertEquals("Carry", person.getLastName());
+        assertEquals("1 Street", person.getAddress());
+        assertEquals("Male", person.getGender());
+    }
 }

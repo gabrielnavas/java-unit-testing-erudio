@@ -13,23 +13,33 @@ public class Person {
     private Long id;
     private String firstName;
     private String lastName;
+    private String email;
     private String address;
     private String gender;
 
     public Person() {
-        this(0L, "", "", "", "");
+        this(0L, "", "", "", "", "");
     }
 
-    public Person(String firstName, String lastName, String address, String gender) {
-        this(0L, firstName, lastName, address, gender);
+    public Person(String firstName, String lastName, String email, String address, String gender) {
+        this(0L, firstName, lastName, email, address, gender);
     }
 
-    public Person(Long id, String firstName, String lastName, String address, String gender) {
+    public Person(Long id, String firstName, String lastName, String email, String address, String gender) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.address = address;
         this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getId() {
