@@ -117,4 +117,38 @@ public class PersonRepositoryTest {
         assertEquals("1 Street", person.getAddress());
         assertEquals("Male", person.getGender());
     }
+
+
+    @DisplayName("Given Person Object When Update Person Then Return Updated Person Object")
+    @Test
+    void testGivenPersonObject_WhenUpdatePerson_thenReturnUpdatedPersonObject() {
+        // Given
+        Person person = new Person("John", "Carry", "john@email.com", "1 Street", "Male");
+        Long expectedPersonId = 1L;
+        person = personRepository.save(person);
+
+        // When
+        person.setAddress("Any Other Street");
+        person.setFirstName("Any Other First Name");
+        person.setLastName("Any Other Last Name");
+        person.setEmail("Any Other Email");
+        person.setGender("Any Other Gender");
+        personRepository.save(person);
+
+        // Then
+        Person personUpdated = personRepository.findById(person.getId()).get();
+
+        assertNotNull(personUpdated);
+        assertNotNull(personUpdated.getFirstName());
+        assertNotNull(personUpdated.getLastName());
+        assertNotNull(personUpdated.getAddress());
+        assertNotNull(personUpdated.getGender());
+
+        assertTrue(personUpdated.getId() >= expectedPersonId);
+
+        assertEquals(person.getFirstName(), personUpdated.getFirstName());
+        assertEquals(person.getLastName(), personUpdated.getLastName());
+        assertEquals(person.getAddress(), personUpdated.getAddress());
+        assertEquals(person.getGender(), personUpdated.getGender());
+    }
 }
