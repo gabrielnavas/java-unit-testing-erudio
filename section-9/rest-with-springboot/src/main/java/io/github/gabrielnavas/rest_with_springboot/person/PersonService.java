@@ -43,6 +43,8 @@ public class PersonService {
     }
 
     public List<Person> findAllPerson(int page, int size) {
+        logger.info("Finding people!");
+
         List<Person> data = new ArrayList<>();
         int init = page * size;
         int end = (page * size) + size;
@@ -54,6 +56,8 @@ public class PersonService {
     }
 
     public Person createPerson(PersonRequest request) {
+        logger.info("Create a Person!");
+
         final Person person = new Person();
         person.setId(counter.incrementAndGet());
         person.setAddress("São Paulo - SP " + person.getId());
@@ -66,6 +70,8 @@ public class PersonService {
 
 
     public void partialsUpdatePerson(Long personId, PersonRequest request) {
+        logger.info("Partials update a Person!");
+
         Person person = null;
         for (Person value : people) {
             if (value.getId().equals(personId)) {
@@ -84,6 +90,8 @@ public class PersonService {
     }
 
     public void deletePerson(Long personId) {
+        logger.info("Delete a Person!");
+
         Person person = null;
         for (Person value : people) {
             if (value.getId().equals(personId)) {
