@@ -11,10 +11,10 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("""
                 SELECT p
                 FROM Person p
-                WHERE LOWER(p.firstName) like LOWER(%:query%)
-                OR LOWER(p.lastName) like LOWER(%:query%)
-                OR LOWER(p.address) like LOWER(%:query%)
-                OR LOWER(p.gender) like LOWER(%:query%)
+                WHERE LOWER(p.firstName) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR LOWER(p.address) LIKE LOWER(CONCAT('%', :query, '%'))
+                OR LOWER(p.gender) LIKE LOWER(CONCAT('%', :query, '%'))
             """
     )
     Page<Person> findAllByQuery(
