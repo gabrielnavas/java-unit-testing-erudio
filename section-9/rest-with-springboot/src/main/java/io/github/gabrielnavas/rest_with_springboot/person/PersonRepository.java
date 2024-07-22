@@ -63,4 +63,17 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             nativeQuery = true
     )
     Optional<Person> findByFirstNameAndLastNameNativeSQL(String firstName, String lastName);
+
+    @Query(value = """
+            select * 
+            from person p
+            where p.first_name = :first_name
+            and p.last_name = :last_name
+            """,
+            nativeQuery = true
+    )
+    Optional<Person> findByFirstNameAndLastNameNativeSQLWithNamedParameters(
+            @Param("first_name") String firstName,
+            @Param("last_name") String lastName
+    );
 }
