@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -18,10 +20,13 @@ public class PersonRepositoryTest {
     @DisplayName("Given Person Object When save then return Saved Person")
     @Test
     void testGivenPersonObject_WhenSave_thenReturnSavedPerson() {
+        // Given
         Person person = new Person("John", "Carry", "1 Street", "Male");
 
+        // When
         person = personRepository.save(person);
 
+        // Then
         assertNotNull(person);
         assertNotNull(person.getId());
         assertNotNull(person.getFirstName());
@@ -40,17 +45,51 @@ public class PersonRepositoryTest {
     @DisplayName("Given Person Objects When Find All By Query then return List Person")
     @Test
     void testGivenPersonObjects_WhenFindAllByQuery_thenReturnListPerson() {
+        // Given
         Person person1 = new Person("John", "Carry", "1 Street", "Male");
         Person person2 = new Person("Mary", "Luth", "10 Street", "Woman");
+
         String lastNameSubstring = "rry";
+        PageRequest page = PageRequest.of(0, 10);
+        int expectedTotalElements = 1;
 
         personRepository.save(person1);
         personRepository.save(person2);
 
-        PageRequest page = PageRequest.of(0, 10);
+        // When
         Page<Person> person = personRepository.findAllByQuery(lastNameSubstring, page);
 
+        // Then
         assertNotNull(person);
-        assertEquals(1, person.getTotalElements());
+        assertEquals(expectedTotalElements, person.getTotalElements());
     }
+
+    @DisplayName("Given Person Object When Find By Id then return Person Object")
+    @Test
+    void testGivenPersonObject_WhenFindById_thenReturnPersonObject() {
+        // Given
+        Person person = new Person("John", "Carry", "1 Street", "Male");
+        Long personId = 1L;
+        personRepository.save(person);
+
+        // When
+        Optional<Person> actualPersonOptional = personRepository.findById(personId);
+        person = actualPersonOptional.get();
+
+        // Then
+        assertNotNull(person);
+        assertNotNull(person.getFirstName());
+        assertNotNull(person.getLastName());
+        assertNotNull(person.getAddress());
+        assertNotNull(person.getGender());
+
+        assertTrue(person.getId() >= personId);
+
+        assertEquals(personId, person.getId());
+        assertEquals("John", person.getFirstName());
+        assertEquals("Carry", person.getLastName());
+        assertEquals("1 Street", person.getAddress());
+        assertEquals("Male", person.getGender());
+    }
+
 }
