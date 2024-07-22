@@ -36,4 +36,12 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     )
     Optional<Person> findByFirstNameAndLastName(String firstName, String lastName);
 
+    @Query("""
+            SELECT p 
+            FROM Person p
+            WHERE p.firstName = :first_name
+            AND p.lastName = :last_name
+            """
+    )
+    Optional<Person> findByFirstNameAndLastNameParamNamed(@Param("first_name") String firstName, @Param("last_name") String lastName);
 }
