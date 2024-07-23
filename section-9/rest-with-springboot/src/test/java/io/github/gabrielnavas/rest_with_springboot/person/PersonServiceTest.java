@@ -10,11 +10,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
@@ -45,5 +44,24 @@ public class PersonServiceTest {
         // Then
         assertNotNull(personCreated);
         assertTrue(personCreated.getId() >= 1L);
+    }
+
+    @DisplayName("Given Existing Email When Save Person Then Throws Exception")
+    @Test
+    public void testGivenExistingEmail_WhenSavePerson_ThenThrowsException() {
+        // Given
+        PersonRequest personRequest = new PersonRequest(person1.getFirstName(), person1.getLastName(), person1.getEmail(), person1.getAddress(), person1.getGender());
+        when(personRepository.findByEmail(anyString())).thenReturn(Optional.of(person1));
+
+        // When & Then
+        PersonNotFoundException received = assertThrows(
+                PersonNotFoundException.class,
+                () -> personService.createPerson(personRequest),
+                () -> "expected exception with class " + PersonNotFoundException.class.getName()
+        );
+
+        // Then
+        verify(personRepository, never()).save(any(Person.class));
+        assertEquals("person not found with email " + personRequest.getEmail(), received.getMessage());
     }
 }

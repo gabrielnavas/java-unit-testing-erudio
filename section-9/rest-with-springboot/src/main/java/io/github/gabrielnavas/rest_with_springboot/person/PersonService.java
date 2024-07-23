@@ -45,7 +45,7 @@ public class PersonService {
 
         Optional<Person> personOptionalEmail = personRepository.findByEmail(request.getEmail());
         if (personOptionalEmail.isPresent()) {
-            throw new RuntimeException("person already exists with email");
+            throw new PersonNotFoundException("email", request.getEmail());
         }
 
         final Person person = new Person();
