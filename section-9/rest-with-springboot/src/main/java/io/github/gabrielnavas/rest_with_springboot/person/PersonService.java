@@ -30,7 +30,8 @@ public class PersonService {
                 page,
                 size,
                 Sort.Direction.DESC,
-                "id");
+                "id"
+        );
 
         if (searchQuery == null || searchQuery.isEmpty()) {
             return personRepository.findAll(pageRequest).stream().toList();

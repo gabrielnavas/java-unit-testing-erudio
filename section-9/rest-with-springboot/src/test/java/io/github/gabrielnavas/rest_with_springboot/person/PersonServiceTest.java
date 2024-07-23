@@ -7,7 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +31,11 @@ public class PersonServiceTest {
     @BeforeEach
     void setup() {
         // Given
-        person1 = new Person(1L, "John", "Carry", "john@email.com", "1 Street", "Male");
+        person1 = generateInstancePerson(1L);
+    }
+
+    private Person generateInstancePerson(Long personId) {
+        return new Person(personId, "John", "Carry", "john@email.com", "1 Street", "Male");
     }
 
     @DisplayName("Given Person Object When Save Person Then Return Person Object")
@@ -63,5 +71,27 @@ public class PersonServiceTest {
         // Then
         verify(personRepository, never()).save(any(Person.class));
         assertEquals("person not found with email " + personRequest.getEmail(), received.getMessage());
+    }
+
+
+    @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List")
+    @Test
+    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsList() {
+        // Given
+        int page = 0;
+        int size = 10;
+        int amountPersons = 10;
+        List<Person> personList = new ArrayList<>();
+        for (int i = 0; i < amountPersons; i++) {
+            personList.add(generateInstancePerson(i + 1L));
+        }
+        when(personRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(personList));
+
+        // When
+        List<Person> received = personService.findAllPerson(page, size, null);
+
+        // Then
+        verify(personRepository, never()).findAllByQuery(anyString(), any(PageRequest.class));
+        assertEquals(amountPersons, received.size());
     }
 }
