@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -74,21 +75,23 @@ public class PersonServiceTest {
     }
 
 
-    @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List")
+    @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List And Never Call Find All By Query")
     @Test
-    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsList() {
+    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAbdNeverCallFindAllByQuery() {
         // Given
+        int amountPersons = 10;
         int page = 0;
         int size = 10;
-        int amountPersons = 10;
+        String searchQuery = null;
         List<Person> personList = new ArrayList<>();
-        for (int i = 0; i < amountPersons; i++) {
-            personList.add(generateInstancePerson(i + 1L));
-        }
-        when(personRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(personList));
+
+        personList.add(person1);
+        personList.add(generateInstancePerson(2L));
+        Page<Person> personPage = new PageImpl<>(personList);
 
         // When
-        List<Person> received = personService.findAllPerson(page, size, null);
+        when(personRepository.findAll(any(PageRequest.class))).thenReturn(personPage);
+        List<Person> received = personService.findAllPerson(page, size, searchQuery);
 
         // Then
         verify(personRepository, never()).findAllByQuery(anyString(), any(PageRequest.class));
