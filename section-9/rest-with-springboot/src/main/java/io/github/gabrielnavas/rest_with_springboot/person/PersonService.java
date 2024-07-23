@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Service
@@ -41,6 +42,11 @@ public class PersonService {
 
     public Person createPerson(PersonRequest request) {
         logger.info("Create a Person!");
+
+        Optional<Person> personOptionalEmail = personRepository.findByEmail(request.getEmail());
+        if (personOptionalEmail.isPresent()) {
+            throw new RuntimeException("person already exists with email");
+        }
 
         final Person person = new Person();
         person.setAddress(request.getAddress());

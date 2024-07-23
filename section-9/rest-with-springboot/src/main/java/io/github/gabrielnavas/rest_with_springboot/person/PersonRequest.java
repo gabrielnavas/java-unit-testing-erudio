@@ -3,14 +3,24 @@ package io.github.gabrielnavas.rest_with_springboot.person;
 public class PersonRequest {
     private String firstName;
     private String lastName;
+    private String email;
     private String address;
     private String gender;
 
-    public PersonRequest(String firstName, String lastName, String address, String gender) {
+    public PersonRequest(String firstName, String lastName, String email, String address, String gender) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.address = address;
         this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {
