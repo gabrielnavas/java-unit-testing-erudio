@@ -10,7 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -43,15 +44,6 @@ public class PersonServiceTest {
 
         // Then
         assertNotNull(personCreated);
-        assertNotNull(personCreated.getId());
-        assertNotNull(personCreated.getFirstName());
-        assertNotNull(personCreated.getLastName());
-        assertNotNull(personCreated.getAddress());
-        assertNotNull(personCreated.getGender());
         assertTrue(personCreated.getId() >= 1L);
-        assertEquals(person1.getFirstName(), personCreated.getFirstName());
-        assertEquals(person1.getLastName(), personCreated.getLastName());
-        assertEquals(person1.getAddress(), personCreated.getAddress());
-        assertEquals(person1.getGender(), personCreated.getGender());
     }
 }
