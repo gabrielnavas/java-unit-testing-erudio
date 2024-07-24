@@ -197,4 +197,18 @@ public class PersonServiceTest {
         verify(personRepository, never()).save(any(Person.class));
         assertEquals(runtimeErrorExpected, runtimeException.getMessage());
     }
+
+    @DisplayName("Given Person Object When Delete Then Remove Person")
+    @Test
+    public void testGivenPersonObject_WhenDelete_ThenRemovePerson() {
+        // When & Then
+        when(personRepository.findById(anyLong())).thenReturn(Optional.of(person1));
+        assertDoesNotThrow(() ->
+                // When
+                personService.deletePerson(person1.getId())
+        );
+
+        // Then
+        verify(personRepository).delete(any(Person.class));
+    }
 }
