@@ -59,7 +59,7 @@ public class PersonControllerTest {
         person = new Person(1L, personRequest.getFirstName(), personRequest.getLastName(), personRequest.getEmail(), personRequest.getAddress(), personRequest.getGender());
     }
 
-    @DisplayName("")
+    @DisplayName("given person request when create person then return saved person")
     @Test
     void testGivenPersonRequest_WhenCreatePerson_thenReturnSavedPerson() throws Exception {
         // Given
@@ -81,7 +81,7 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.gender", is(personRequest.getGender())));
     }
 
-    @DisplayName("")
+    @DisplayName("given list persons when find all by query then return list persons")
     @ParameterizedTest
     @MethodSource("findAllInputPath")
     void testGivenListPersons_WhenFindAllByQuery_thenReturnListPersons(String path) throws Exception {
