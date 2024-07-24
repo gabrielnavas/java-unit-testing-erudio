@@ -78,6 +78,10 @@ public class PersonService {
     }
 
     public void deletePerson(Long personId) {
+        if (personId == null) {
+            throw new IllegalArgumentException("missing person id param");
+        }
+        
         logger.info("Delete a Person!");
         Person person = personRepository.findById(personId).orElseThrow(() -> new PersonNotFoundException("id", String.format("%d", personId)));
         personRepository.delete(person);

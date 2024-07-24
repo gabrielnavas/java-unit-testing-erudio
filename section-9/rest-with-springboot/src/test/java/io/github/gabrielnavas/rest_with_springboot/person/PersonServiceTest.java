@@ -228,4 +228,20 @@ public class PersonServiceTest {
         verify(personRepository, never()).delete(any(Person.class));
         assertEquals("person not found with id " + person1.getId(), runtimeException.getMessage());
     }
+
+    @DisplayName("Given Person Object When Delete With Null Param Then Throws Exception")
+    @Test
+    public void testGivenPersonObject_WhenDeleteWithNullParam_ThenThrowsException() {
+        // When & Then
+        RuntimeException runtimeException = assertThrows(
+                IllegalArgumentException.class,
+                // When
+                () -> personService.deletePerson(null),
+                () -> "expected class " + PersonNotFoundException.class.getName()
+        );
+
+        // Then
+        verify(personRepository, never()).delete(any(Person.class));
+        assertEquals("missing person id param", runtimeException.getMessage());
+    }
 }
