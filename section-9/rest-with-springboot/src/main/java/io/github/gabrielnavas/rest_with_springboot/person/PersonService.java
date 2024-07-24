@@ -61,7 +61,7 @@ public class PersonService {
     public void partialsUpdatePerson(Long personId, PersonRequest request) {
         logger.info("Partials update a Person!");
 
-        Person person = personRepository.findById(personId).orElseThrow(() -> new RuntimeException("person not found"));
+        Person person = personRepository.findById(personId).orElseThrow(() -> new PersonNotFoundException("id", String.format("%d", personId)));
 
         person.setFirstName(request.getFirstName());
         person.setLastName(request.getLastName());

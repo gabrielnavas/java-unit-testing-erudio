@@ -146,4 +146,20 @@ public class PersonServiceTest {
         // Then
         verify(personRepository).save(any(Person.class));
     }
+
+    @DisplayName("Given Person Object When Partials Update Person With Not Found Person Then Throws Exception")
+    @Test
+    public void testGivenPersonObject_WhenPartialsUpdateWithNotFoundPerson_ThenThrowsException() {
+        // When & Then
+        when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(
+                PersonNotFoundException.class,
+                // When
+                () -> personService.partialsUpdatePerson(person1.getId(), personRequest),
+                () -> "person not found with id " + person1.getId()
+        );
+
+        // Then
+        verify(personRepository, never()).save(any(Person.class));
+    }
 }
