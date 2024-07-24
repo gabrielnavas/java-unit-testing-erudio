@@ -211,4 +211,21 @@ public class PersonServiceTest {
         // Then
         verify(personRepository).delete(any(Person.class));
     }
+
+    @DisplayName("Given Person Object When Delete Not Found Person Then Throws Exception")
+    @Test
+    public void testGivenPersonObject_WhenDeleteNotFoundPerson_ThenThrowsException() {
+        // When & Then
+        when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
+        RuntimeException runtimeException = assertThrows(
+                PersonNotFoundException.class,
+                // When
+                () -> personService.deletePerson(person1.getId()),
+                () -> "expected class " + PersonNotFoundException.class.getName()
+        );
+
+        // Then
+        verify(personRepository, never()).delete(any(Person.class));
+        assertEquals("person not found with id " + person1.getId(), runtimeException.getMessage());
+    }
 }

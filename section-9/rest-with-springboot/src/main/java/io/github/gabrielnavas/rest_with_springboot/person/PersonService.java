@@ -79,7 +79,7 @@ public class PersonService {
 
     public void deletePerson(Long personId) {
         logger.info("Delete a Person!");
-        Person person = personRepository.findById(personId).orElseThrow(() -> new RuntimeException("person not found"));
+        Person person = personRepository.findById(personId).orElseThrow(() -> new PersonNotFoundException("id", String.format("%d", personId)));
         personRepository.delete(person);
     }
 }
