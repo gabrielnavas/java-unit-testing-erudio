@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -139,7 +140,7 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
     }
 
-    @DisplayName("given person object when find person by id then return list persons")
+    @DisplayName("given person object when delete person then return list persons")
     @Test
     void testGivenPersonObject_WhenDeletePerson_thenRemovePerson() throws Exception {
         // When
@@ -149,5 +150,23 @@ public class PersonControllerTest {
 
         // Then
         resultActions.andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @DisplayName("given person object when delete not found person then throws exception")
+    @Test
+    void testGivenPersonObject_WhenDeleteNotFound_thenThrowsException() throws Exception {
+        // When
+        doThrow(
+                new PersonNotFoundException("id", personRequest.getEmail())
+        ).when(personService).deletePerson(person.getId());
+        ResultActions resultActions = mockMvc.perform(
+                delete("/person/{id}", person.getId())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
+        ;
     }
 }
