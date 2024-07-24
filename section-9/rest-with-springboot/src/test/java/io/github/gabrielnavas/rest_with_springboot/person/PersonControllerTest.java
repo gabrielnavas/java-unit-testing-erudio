@@ -172,7 +172,7 @@ public class PersonControllerTest {
 
     @DisplayName("given changed person object when partials update person then update person")
     @Test
-    void partialsUpdatePerson() throws Exception {
+    void testGivenChangedPersonObject_whenPartialsUpdatePerson_thenUpdatePerson() throws Exception {
         // When
         personRequest.setFirstName("any-firstname");
 
@@ -184,5 +184,23 @@ public class PersonControllerTest {
 
         // Then
         resultActions.andDo(print()).andExpect(status().isNoContent());
+    }
+
+    @DisplayName("given changed person object when partials update not found person then throws exception")
+    @Test
+    void testGivenChangedPersonObject_whenPartialsUpdate_thenThrowsException() throws Exception {
+        // When
+        doThrow(
+                new RuntimeException("any-error")
+        ).when(personService).partialsUpdatePerson(anyLong(), any(PersonRequest.class));
+
+        ResultActions resultActions = mockMvc.perform(
+                patch("/person/{person-id}", person.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(personRequest))
+        );
+
+        // Then
+        resultActions.andDo(print()).andExpect(status().isInternalServerError());
     }
 }
