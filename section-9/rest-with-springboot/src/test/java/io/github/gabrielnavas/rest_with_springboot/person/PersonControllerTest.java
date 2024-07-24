@@ -98,6 +98,7 @@ public class PersonControllerTest {
         // Then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(personList.size())))
                 .andExpect(jsonPath("$[0].firstName", is(personRequest.getFirstName())))
                 .andExpect(jsonPath("$[0].lastName", is(personRequest.getLastName())))
                 .andExpect(jsonPath("$[0].email", is(personRequest.getEmail())))
