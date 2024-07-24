@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,14 +33,23 @@ public class PersonServiceTest {
     @InjectMocks
     private PersonService personService;
 
+    private static Person generateInstancePerson(Long personId) {
+        return new Person(personId, "John", "Carry", "john@email.com", "1 Street", "Male");
+    }
+
+    private static Stream<Arguments> findAllPersonsInputParams() {
+        return Stream.of(
+                Arguments.of(new PageImpl<>(new ArrayList<Person>() {{
+                    add(generateInstancePerson(1L));
+                }}), 1),
+                Arguments.of(new PageImpl<>(new ArrayList<Person>()), 0)
+        );
+    }
+
     @BeforeEach
     void setup() {
         // Given
         person1 = generateInstancePerson(1L);
-    }
-
-    private Person generateInstancePerson(Long personId) {
-        return new Person(personId, "John", "Carry", "john@email.com", "1 Street", "Male");
     }
 
     @DisplayName("Given Person Object When Save Person Then Return Person Object")
@@ -75,18 +88,15 @@ public class PersonServiceTest {
     }
 
     @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List And Never Call Find All By Query")
-    @Test
-    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAbdNeverCallFindAllByQuery() {
+    @ParameterizedTest
+    @MethodSource("findAllPersonsInputParams")
+    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAndNeverCallFindAllByQuery(
+            Page<Person> personPage, int expectedAmountPersons
+    ) {
         // Given
-        int amountPersons = 10;
+        String searchQuery = null;
         int page = 0;
         int size = 10;
-        String searchQuery = null;
-        List<Person> personList = new ArrayList<>();
-
-        personList.add(person1);
-        personList.add(generateInstancePerson(2L));
-        Page<Person> personPage = new PageImpl<>(personList);
 
         // When
         when(personRepository.findAll(any(PageRequest.class))).thenReturn(personPage);
@@ -95,21 +105,19 @@ public class PersonServiceTest {
         // Then
         assertNotNull(receivedPersonList);
         verify(personRepository, never()).findAllByQuery(anyString(), any(PageRequest.class));
-        assertEquals(amountPersons, receivedPersonList.size());
+        assertEquals(expectedAmountPersons, receivedPersonList.size());
     }
 
     @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List And Never Call Find All")
-    @Test
-    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAbdNeverCallFindAll() {
+    @ParameterizedTest
+    @MethodSource("findAllPersonsInputParams")
+    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAndNeverCallFindAll(
+            Page<Person> personPage, int expectedAmountPersons
+    ) {
         // Given
-        int amountPersons = 2;
         int page = 0;
         int size = 10;
         String searchQuery = "any-query";
-        List<Person> personList = new ArrayList<>();
-        personList.add(person1);
-        personList.add(generateInstancePerson(2L));
-        Page<Person> personPage = new PageImpl<>(personList);
 
         // When
         when(personRepository.findAllByQuery(anyString(), any(PageRequest.class))).thenReturn(personPage);
@@ -118,6 +126,6 @@ public class PersonServiceTest {
         // Then
         assertNotNull(receivedPersonList);
         verify(personRepository, never()).findAll(any(PageRequest.class));
-        assertEquals(amountPersons, receivedPersonList.size());
+        assertEquals(expectedAmountPersons, receivedPersonList.size());
     }
 }
