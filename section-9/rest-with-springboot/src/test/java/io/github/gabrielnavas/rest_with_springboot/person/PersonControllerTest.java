@@ -169,4 +169,20 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
         ;
     }
+
+    @DisplayName("given changed person object when partials update person then update person")
+    @Test
+    void testGivenChangedPersonObject_WhenUpdatePerson_thenUpdatePerson() throws Exception {
+        // When
+        personRequest.setFirstName("any-firstname");
+
+        ResultActions resultActions = mockMvc.perform(
+                patch("/person/{id}", person.getId())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(personRequest))
+        );
+
+        // Then
+        resultActions.andDo(print()).andExpect(status().isNoContent());
+    }
 }
