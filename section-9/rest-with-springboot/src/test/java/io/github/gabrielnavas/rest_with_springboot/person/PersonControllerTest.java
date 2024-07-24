@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.*;
@@ -37,6 +41,17 @@ public class PersonControllerTest {
 
     private PersonRequest personRequest;
     private Person person;
+
+    public static Stream<Arguments> findAllInputPath() {
+        return Stream.of(
+                Arguments.of("/person"),
+                Arguments.of("/person?size=10"),
+                Arguments.of("/person?size=1"),
+                Arguments.of("/person?page=0"),
+                Arguments.of("/person?page=0&size=10"),
+                Arguments.of("/person?page=0&size=1")
+        );
+    }
 
     @BeforeEach
     void setup() {
@@ -66,10 +81,10 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.gender", is(personRequest.getGender())));
     }
 
-
     @DisplayName("")
-    @Test
-    void testGivenListPersons_WhenFindAllByQuery_thenReturnListPersons() throws Exception {
+    @ParameterizedTest
+    @MethodSource("findAllInputPath")
+    void testGivenListPersons_WhenFindAllByQuery_thenReturnListPersons(String path) throws Exception {
         // Given
         List<Person> personList = new ArrayList<>();
         personList.add(person);
@@ -77,7 +92,7 @@ public class PersonControllerTest {
         // When
         when(personService.findAllPerson(anyInt(), anyInt(), anyString())).thenReturn(personList);
         ResultActions resultActions = mockMvc.perform(
-                get("/person").accept(MediaType.APPLICATION_JSON)
+                get(path).accept(MediaType.APPLICATION_JSON)
         );
 
         // Then
