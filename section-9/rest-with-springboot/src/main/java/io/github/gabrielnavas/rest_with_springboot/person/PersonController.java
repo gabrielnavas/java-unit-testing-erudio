@@ -56,6 +56,7 @@ public class PersonController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public Person createPerson(@RequestBody PersonRequest request) {
         return personService.createPerson(request);
     }
