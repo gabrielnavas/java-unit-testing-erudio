@@ -105,4 +105,38 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$[0].address", is(personRequest.getAddress())))
                 .andExpect(jsonPath("$[0].gender", is(personRequest.getGender())));
     }
+
+    @DisplayName("given list persons when find person by id then return list persons")
+    @Test
+    void testGivenPersonObject_WhenFindPersonById_thenReturnPersonObject() throws Exception {
+        // When
+        when(personService.findPersonById(person.getId())).thenReturn(person);
+        ResultActions resultActions = mockMvc.perform(
+                get("/person/" + person.getId()).accept(MediaType.APPLICATION_JSON)
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(personRequest.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(personRequest.getLastName())))
+                .andExpect(jsonPath("$.email", is(personRequest.getEmail())))
+                .andExpect(jsonPath("$.address", is(personRequest.getAddress())))
+                .andExpect(jsonPath("$.gender", is(personRequest.getGender())));
+    }
+
+    @DisplayName("given list persons when find not found person by id then return throws exception")
+    @Test
+    void testGivenPersonObject_WhenFindNotFoundPersonById_thenReturnThrowsException() throws Exception {
+        // When
+        when(personService.findPersonById(person.getId())).thenThrow(new PersonNotFoundException("id", personRequest.getEmail()));
+        ResultActions resultActions = mockMvc.perform(
+                get("/person/{id}", person.getId())
+        );
+
+        // Then
+        resultActions.andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
+    }
 }
