@@ -59,6 +59,12 @@ public class PersonService {
     }
 
     public void partialsUpdatePerson(Long personId, PersonRequest request) {
+        if (personId == null) {
+            throw new IllegalArgumentException("missing person id param");
+        }
+        if (request == null) {
+            throw new IllegalArgumentException("missing person request param");
+        }
         logger.info("Partials update a Person!");
 
         Person person = personRepository.findById(personId).orElseThrow(() -> new PersonNotFoundException("id", String.format("%d", personId)));

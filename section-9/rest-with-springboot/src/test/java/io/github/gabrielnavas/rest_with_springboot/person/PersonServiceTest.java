@@ -48,6 +48,22 @@ public class PersonServiceTest {
         );
     }
 
+    public static Stream<Arguments> partialsUpdateThrowsInputParams() {
+        Person person1 = generateInstancePerson(1L);
+        PersonRequest personRequest = new PersonRequest(person1.getFirstName(), person1.getLastName(), person1.getEmail(), person1.getAddress(), person1.getGender());
+
+        return Stream.of(
+                Arguments.of(
+                        person1.getId(), personRequest, PersonNotFoundException.class, "person not found with id " + person1.getId()
+                ), Arguments.of(
+                        null, personRequest, IllegalArgumentException.class, "missing person id param"
+                ), Arguments.of(
+                        person1.getId(), null, IllegalArgumentException.class, "missing person request param"
+                )
+
+        );
+    }
+
     @BeforeEach
     void setup() {
         // Given
@@ -132,7 +148,6 @@ public class PersonServiceTest {
         assertEquals(expectedAmountPersons, receivedPersonList.size());
     }
 
-
     @DisplayName("Given Person Object When Partials Update Person Then Update Person")
     @Test
     public void testGivenPersonObject_WhenPartialsUpdatePerson_ThenUpdatePerson() {
@@ -152,14 +167,34 @@ public class PersonServiceTest {
     public void testGivenPersonObject_WhenPartialsUpdateWithNotFoundPerson_ThenThrowsException() {
         // When & Then
         when(personRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(
+        RuntimeException runtimeException = assertThrows(
                 PersonNotFoundException.class,
                 // When
                 () -> personService.partialsUpdatePerson(person1.getId(), personRequest),
-                () -> "person not found with id " + person1.getId()
+                () -> "expected class " + PersonNotFoundException.class.getName()
         );
 
         // Then
         verify(personRepository, never()).save(any(Person.class));
+        assertEquals("person not found with id " + person1.getId(), runtimeException.getMessage());
+    }
+
+    @DisplayName("Given Person Object When Partials Update Person With Null Params Then Throws Exception")
+    @ParameterizedTest
+    @MethodSource("partialsUpdateThrowsInputParams")
+    public void testGivenPersonObject_WhenPartialsUpdateWithNullParams_ThenThrowsException(
+            Long personId, PersonRequest personRequest, Class<RuntimeException> runtimeExceptionExpectedClass, String runtimeErrorExpected
+    ) {
+        // When & Then
+        RuntimeException runtimeException = assertThrows(
+                runtimeExceptionExpectedClass,
+                // When
+                () -> personService.partialsUpdatePerson(personId, personRequest),
+                () -> "expected class " + runtimeExceptionExpectedClass.getName()
+        );
+
+        // Then
+        verify(personRepository, never()).save(any(Person.class));
+        assertEquals(runtimeErrorExpected, runtimeException.getMessage());
     }
 }
