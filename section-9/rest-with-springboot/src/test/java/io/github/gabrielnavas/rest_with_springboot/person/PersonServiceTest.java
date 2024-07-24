@@ -48,6 +48,14 @@ public class PersonServiceTest {
         );
     }
 
+    private static Stream<Arguments> findAllPersonsThrowsInputParams() {
+        return Stream.of(
+                Arguments.of(-1, 0, "", IllegalArgumentException.class, "page and size must be zero or great"),
+                Arguments.of(0, -1, "", IllegalArgumentException.class, "page and size must be zero or great"),
+                Arguments.of(-1, -1, "", IllegalArgumentException.class, "page and size must be zero or great")
+        );
+    }
+
     public static Stream<Arguments> partialsUpdateThrowsInputParams() {
         Person person1 = generateInstancePerson(1L);
         PersonRequest personRequest = new PersonRequest(person1.getFirstName(), person1.getLastName(), person1.getEmail(), person1.getAddress(), person1.getGender());
@@ -59,6 +67,8 @@ public class PersonServiceTest {
                         null, personRequest, IllegalArgumentException.class, "missing person id param"
                 ), Arguments.of(
                         0L, personRequest, IllegalArgumentException.class, "missing person id param"
+                ), Arguments.of(
+                        -1L, personRequest, IllegalArgumentException.class, "missing person id param"
                 ), Arguments.of(
                         person1.getId(), null, IllegalArgumentException.class, "missing person request param"
                 )
@@ -147,6 +157,25 @@ public class PersonServiceTest {
         assertNotNull(receivedPersonList);
         verify(personRepository, never()).findAll(any(PageRequest.class));
         assertEquals(expectedAmountPersons, receivedPersonList.size());
+    }
+
+    @DisplayName("Given Person List When Find All Persons With Negative Params Query Then Throws Exception")
+    @ParameterizedTest
+    @MethodSource("findAllPersonsThrowsInputParams")
+    public void testGivenPersonList_WhenFindAllPersonsWithNegativeParams_ThenThrowsException(
+            int size, int page, String searchQuery, Class<IllegalArgumentException> exceptionClass, String expectedErrorMessage
+    ) {
+        // When & Then
+        Exception exception = assertThrows(
+                exceptionClass,
+
+                // When
+                () -> personService.findAllPerson(page, size, searchQuery),
+                () -> "expected class " + IllegalArgumentException.class.getName()
+        );
+
+        // Then
+        assertEquals(expectedErrorMessage, exception.getMessage());
     }
 
     @DisplayName("Given Person Object When Partials Update Person Then Update Person")

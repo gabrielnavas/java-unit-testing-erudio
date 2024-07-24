@@ -24,6 +24,9 @@ public class PersonService {
     public List<Person> findAllPerson(
             int page, int size, String searchQuery
     ) {
+        if (page < 0 || size < 0) {
+            throw new IllegalArgumentException("page and size must be zero or great");
+        }
         logger.info("Finding people!");
 
         PageRequest pageRequest = PageRequest.of(
