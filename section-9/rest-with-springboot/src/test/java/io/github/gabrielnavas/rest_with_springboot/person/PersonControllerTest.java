@@ -154,10 +154,10 @@ public class PersonControllerTest {
 
     @DisplayName("given person object when delete not found person then throws exception")
     @Test
-    void testGivenPersonObject_whenDeleteNotFound_thenThrowsException() throws Exception {
+    void testGivenPersonObject_whenDeletePerson_thenThrowsException() throws Exception {
         // When
         doThrow(
-                new PersonNotFoundException("id", personRequest.getEmail())
+                new RuntimeException("any-error")
         ).when(personService).deletePerson(person.getId());
 
         ResultActions resultActions = mockMvc.perform(
@@ -167,7 +167,7 @@ public class PersonControllerTest {
         // Then
         resultActions.andDo(print())
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
+                .andExpect(jsonPath("$.message", is("any-error")));
     }
 
     @DisplayName("given changed person object when partials update person then update person")
@@ -201,6 +201,8 @@ public class PersonControllerTest {
         );
 
         // Then
-        resultActions.andDo(print()).andExpect(status().isInternalServerError());
+        resultActions.andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message", is("any-error")));
     }
 }
