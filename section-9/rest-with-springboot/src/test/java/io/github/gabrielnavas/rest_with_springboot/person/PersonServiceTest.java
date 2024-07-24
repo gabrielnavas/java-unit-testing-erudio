@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 public class PersonServiceTest {
 
     protected Person person1;
+    protected PersonRequest personRequest;
+
     @Mock
     private PersonRepository personRepository;
     @InjectMocks
@@ -50,6 +52,7 @@ public class PersonServiceTest {
     void setup() {
         // Given
         person1 = generateInstancePerson(1L);
+        personRequest = new PersonRequest(person1.getFirstName(), person1.getLastName(), person1.getEmail(), person1.getAddress(), person1.getGender());
     }
 
     @DisplayName("Given Person Object When Save Person Then Return Person Object")
@@ -127,5 +130,20 @@ public class PersonServiceTest {
         assertNotNull(receivedPersonList);
         verify(personRepository, never()).findAll(any(PageRequest.class));
         assertEquals(expectedAmountPersons, receivedPersonList.size());
+    }
+
+
+    @DisplayName("Given Person Object When Partials Update Person Then Update Person")
+    @Test
+    public void testGivenPersonObject_WhenPartialsUpdatePerson_ThenUpdatePerson() {
+        // When & Then
+        when(personRepository.findById(anyLong())).thenReturn(Optional.of(person1));
+        assertDoesNotThrow(() ->
+                // When
+                personService.partialsUpdatePerson(person1.getId(), personRequest)
+        );
+
+        // Then
+        verify(personRepository).save(any(Person.class));
     }
 }
