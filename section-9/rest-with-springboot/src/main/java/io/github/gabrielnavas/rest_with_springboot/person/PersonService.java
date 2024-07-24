@@ -59,7 +59,7 @@ public class PersonService {
     }
 
     public void partialsUpdatePerson(Long personId, PersonRequest request) {
-        if (personId == null) {
+        if (personId == null || personId <= 0) {
             throw new IllegalArgumentException("missing person id param");
         }
         if (request == null) {
@@ -81,7 +81,7 @@ public class PersonService {
         if (personId == null) {
             throw new IllegalArgumentException("missing person id param");
         }
-        
+
         logger.info("Delete a Person!");
         Person person = personRepository.findById(personId).orElseThrow(() -> new PersonNotFoundException("id", String.format("%d", personId)));
         personRepository.delete(person);

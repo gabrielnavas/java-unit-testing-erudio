@@ -58,9 +58,10 @@ public class PersonServiceTest {
                 ), Arguments.of(
                         null, personRequest, IllegalArgumentException.class, "missing person id param"
                 ), Arguments.of(
+                        0L, personRequest, IllegalArgumentException.class, "missing person id param"
+                ), Arguments.of(
                         person1.getId(), null, IllegalArgumentException.class, "missing person request param"
                 )
-
         );
     }
 
