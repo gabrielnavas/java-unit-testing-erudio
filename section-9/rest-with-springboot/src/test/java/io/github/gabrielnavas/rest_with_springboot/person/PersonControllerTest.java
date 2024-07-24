@@ -127,7 +127,7 @@ public class PersonControllerTest {
 
     @DisplayName("given person object when find not found person by id then return throws exception")
     @Test
-    void testGivenPersonObject_WhenFindNotFoundPersonById_thenReturnThrowsException() throws Exception {
+    void testGivenPersonObject_whenFindNotFoundPersonById_thenReturnThrowsException() throws Exception {
         // When
         when(personService.findPersonById(person.getId())).thenThrow(new PersonNotFoundException("id", personRequest.getEmail()));
         ResultActions resultActions = mockMvc.perform(
@@ -142,7 +142,7 @@ public class PersonControllerTest {
 
     @DisplayName("given person object when delete person then return list persons")
     @Test
-    void testGivenPersonObject_WhenDeletePerson_thenRemovePerson() throws Exception {
+    void testGivenPersonObject_whenDeletePerson_thenRemovePerson() throws Exception {
         // When
         ResultActions resultActions = mockMvc.perform(
                 delete("/person/{id}", person.getId())
@@ -154,11 +154,12 @@ public class PersonControllerTest {
 
     @DisplayName("given person object when delete not found person then throws exception")
     @Test
-    void testGivenPersonObject_WhenDeleteNotFound_thenThrowsException() throws Exception {
+    void testGivenPersonObject_whenDeleteNotFound_thenThrowsException() throws Exception {
         // When
         doThrow(
                 new PersonNotFoundException("id", personRequest.getEmail())
         ).when(personService).deletePerson(person.getId());
+
         ResultActions resultActions = mockMvc.perform(
                 delete("/person/{id}", person.getId())
         );
@@ -167,17 +168,16 @@ public class PersonControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
-        ;
     }
 
     @DisplayName("given changed person object when partials update person then update person")
     @Test
-    void testGivenChangedPersonObject_WhenUpdatePerson_thenUpdatePerson() throws Exception {
+    void partialsUpdatePerson() throws Exception {
         // When
         personRequest.setFirstName("any-firstname");
 
         ResultActions resultActions = mockMvc.perform(
-                patch("/person/{id}", person.getId())
+                patch("/person/{person-id}", person.getId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(personRequest))
         );
