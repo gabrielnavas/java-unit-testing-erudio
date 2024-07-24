@@ -21,8 +21,7 @@ import java.util.stream.Stream;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -106,7 +105,7 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$[0].gender", is(personRequest.getGender())));
     }
 
-    @DisplayName("given list persons when find person by id then return list persons")
+    @DisplayName("given person object when find person by id then return list persons")
     @Test
     void testGivenPersonObject_WhenFindPersonById_thenReturnPersonObject() throws Exception {
         // When
@@ -125,7 +124,7 @@ public class PersonControllerTest {
                 .andExpect(jsonPath("$.gender", is(personRequest.getGender())));
     }
 
-    @DisplayName("given list persons when find not found person by id then return throws exception")
+    @DisplayName("given person object when find not found person by id then return throws exception")
     @Test
     void testGivenPersonObject_WhenFindNotFoundPersonById_thenReturnThrowsException() throws Exception {
         // When
@@ -138,5 +137,17 @@ public class PersonControllerTest {
         resultActions.andDo(print())
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message", is("person not found with id john@email.com")));
+    }
+
+    @DisplayName("given person object when find person by id then return list persons")
+    @Test
+    void testGivenPersonObject_WhenDeletePerson_thenRemovePerson() throws Exception {
+        // When
+        ResultActions resultActions = mockMvc.perform(
+                delete("/person/{id}", person.getId())
+        );
+
+        // Then
+        resultActions.andDo(print()).andExpect(status().isNoContent());
     }
 }
