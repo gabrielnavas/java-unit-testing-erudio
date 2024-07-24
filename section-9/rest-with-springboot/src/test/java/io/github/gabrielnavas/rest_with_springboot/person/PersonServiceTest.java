@@ -74,7 +74,6 @@ public class PersonServiceTest {
         assertEquals("person not found with email " + personRequest.getEmail(), received.getMessage());
     }
 
-
     @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List And Never Call Find All By Query")
     @Test
     public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAbdNeverCallFindAllByQuery() {
@@ -91,10 +90,34 @@ public class PersonServiceTest {
 
         // When
         when(personRepository.findAll(any(PageRequest.class))).thenReturn(personPage);
-        List<Person> received = personService.findAllPerson(page, size, searchQuery);
+        List<Person> receivedPersonList = personService.findAllPerson(page, size, searchQuery);
 
         // Then
+        assertNotNull(receivedPersonList);
         verify(personRepository, never()).findAllByQuery(anyString(), any(PageRequest.class));
-        assertEquals(amountPersons, received.size());
+        assertEquals(amountPersons, receivedPersonList.size());
+    }
+
+    @DisplayName("Given Person List When Find All Persons By Search Query Null Then Return Persons List And Never Call Find All")
+    @Test
+    public void testGivenPersonList_WhenFindAllPersonsBySearchQueryNull_ThenReturnPersonsListAbdNeverCallFindAll() {
+        // Given
+        int amountPersons = 2;
+        int page = 0;
+        int size = 10;
+        String searchQuery = "any-query";
+        List<Person> personList = new ArrayList<>();
+        personList.add(person1);
+        personList.add(generateInstancePerson(2L));
+        Page<Person> personPage = new PageImpl<>(personList);
+
+        // When
+        when(personRepository.findAllByQuery(anyString(), any(PageRequest.class))).thenReturn(personPage);
+        List<Person> receivedPersonList = personService.findAllPerson(page, size, searchQuery);
+
+        // Then
+        assertNotNull(receivedPersonList);
+        verify(personRepository, never()).findAll(any(PageRequest.class));
+        assertEquals(amountPersons, receivedPersonList.size());
     }
 }
