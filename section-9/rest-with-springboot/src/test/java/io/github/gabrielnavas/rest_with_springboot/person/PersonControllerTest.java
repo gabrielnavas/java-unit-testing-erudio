@@ -63,7 +63,16 @@ public class PersonControllerTest {
     @Test
     void testGivenPersonRequest_WhenCreatePerson_thenReturnSavedPerson() throws Exception {
         // Given
-        when(personService.createPerson(any(PersonRequest.class))).thenReturn(person);
+        when(personService.createPerson(any(PersonRequest.class))).thenAnswer(invocationOnMock -> {
+            PersonRequest personRequest = invocationOnMock.getArgument(0);
+            return new Person(
+                    1L,
+                    personRequest.getFirstName(),
+                    personRequest.getLastName(),
+                    personRequest.getEmail(),
+                    personRequest.getAddress(),
+                    personRequest.getGender());
+        });
 
         // When
         ResultActions resultActions = mockMvc.perform(
